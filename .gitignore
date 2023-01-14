@@ -2,3 +2,5 @@
 
 result/*.json
 url/*.csv
+
+test.py

@@ -1,18 +1,10 @@
+import os
+import csv
+
 from selenium import webdriver
-from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from collections import Counter
 from webdriver_manager.chrome import ChromeDriverManager
-
-import csv
-import json
-
-import os
-from datetime import datetime
-# from main import AREACODE
 
 
 class UrlManager:
@@ -33,8 +25,8 @@ class UrlManager:
 
         url_list = []
 
-        # for i in range(int(last_page)): 나중에는 이걸로 사용
-        for i in range(2):  # 일단은 2페이지까지만
+        for i in range(int(last_page)):
+        # for i in range(2):  # 테스트용
             page = i + 1
             url = f"http://www.alba.co.kr/job/area/MainLocal.asp?viewtype=L&sidocd=031&page={page}"
 
@@ -75,7 +67,6 @@ class UrlManager:
             n += 1
         return
 
-    # areacode_update.csv의 내용을 areacode.csv로 옮기는 함수
     def overwrite_url(self):
         try:
             updated_csv = open(f"{os.getcwd()}/url/{self.AREACODE}_update.csv", "r")
@@ -99,8 +90,6 @@ class UrlManager:
             writer.writerow([i["index"], i["url"], i["scraped"]])
         return
 
-    # load_url() 변수 바꿔서 위 함수에서 써도 될듯?
-
     def load_url(self):
         csv_for_scrap = open(f"{os.getcwd()}/url/{self.AREACODE}.csv", "r")
         reader = csv.reader(csv_for_scrap)
@@ -115,7 +104,7 @@ class UrlManager:
 
         return url_dict
 
-    def renew_url_status(self, url_dict):
+    def update_url_status(self, url_dict):
         renewed_csv = open(f"{os.getcwd()}/url/{self.AREACODE}_update.csv", "w")
 
         writer = csv.writer(renewed_csv)
@@ -123,8 +112,3 @@ class UrlManager:
 
         for i in url_dict:
             writer.writerow([i["index"], i["url"], i["scraped"]])
-        return
-
-
-
-
