@@ -16,6 +16,8 @@ class AlbaCrawler:
     def save_json(self, result_list):
 
         json_list = []
+        json_list_areacode = []
+
         dir_path = f"{os.getcwd()}/result"
         for (root, directories, files) in os.walk(dir_path):
             for file in files:
@@ -23,8 +25,12 @@ class AlbaCrawler:
                     file_path = os.path.join(root, file)
                     json_list.append(file_path)
 
-        if len(json_list) > 0:
-            latest_json_path = json_list[-1]
+        for j in json_list:
+            if self.AREACODE in j:
+                json_list_areacode.append(j)
+
+        if len(json_list_areacode) > 0:
+            latest_json_path = json_list_areacode[-1]
             with open(latest_json_path) as latest:
                 latest_data = json.load(latest)
 
@@ -54,8 +60,6 @@ class AlbaCrawler:
         company = driver.find_element(By.CSS_SELECTOR, "strong.detail-content__tag-branch").text
         post_date = driver.find_element(By.CSS_SELECTOR, "div#DetailView div.detail-regist__date > em:first-child").text
 
-        # 지역 필터
-
         n = 3
         while True:
             dl = driver.find_element(By.CSS_SELECTOR, f"div#InfoWork dl:nth-child({n})").text
@@ -68,8 +72,11 @@ class AlbaCrawler:
 
         raw_local_info = dl.replace("동정보", "").strip()
         local_info = raw_local_info.split(" ")
-        # province = local_info[0].strip()
-        city = local_info[1].strip()
+        # province = local_info[0].strip() -> ex) 경기
+        try:
+            city = local_info[1].strip()
+        except:
+            city = "X"
         try:
             dong = local_info[2].strip()
         except:
@@ -141,27 +148,28 @@ class AlbaCrawler:
                     result_json = self.extract_data(i["url"], driver)
                     if result_json == "login required":
                         i["scraped"] = "login required"
-                        print(f"No.{n} url requires login")
+                        print(f"No.{n} scrap failed(login required)")
                     else:
                         result_list.append(result_json)
                         # scrap된 url의 scraped를 True로 변환
                         i["scraped"] = "True"
-                        print(f"No.{n} is being scraped")
+                        print(f"No.{n} scraped successfully")
+
+                    time.sleep(2)
+
                 except:
-                    print(f"No.{n} is not scraped")
+                    print(f"No.{n} scrap failed(error)")
 
             elif i["scraped"] == "login required":
-                print(f"No.{n} requires login")
+                print(f"No.{n} pass(login required)")
 
             else:
-                print(f"No.{n} url was scraped")
+                print(f"No.{n} pass(scraped)")
 
             n += 1
 
             # if n == 16:
                 # break
-
-        time.sleep(.5)  # 접속이 제한되어 써두긴 했는데 테스트하지는 못함
 
         driver.quit()
 

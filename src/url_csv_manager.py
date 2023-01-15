@@ -1,5 +1,6 @@
 import os
 import csv
+import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -50,6 +51,8 @@ class UrlManager:
                 url_list.append(url.get_attribute("href"))
 
             print(f"page {page} url scraped")
+
+            time.sleep(1)
 
         driver.quit()
 
