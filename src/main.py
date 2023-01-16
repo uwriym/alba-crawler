@@ -7,11 +7,16 @@ from selenium.webdriver.chrome.service import Service
 import url_csv_manager
 import crawler
 
+try:
+    os.chdir('src/..')
+except:
+    os.chdir('../')
 
 # 지역번호
 ## 서울(02), 경기(031), 인천(032), 대전(042), 대구(053), 부산(051), 울산(052), 광주(062), 제주(064)
 ## 강원(033), 세종(044), 충북(043), 충남(041), 경북(054), 경남(055), 전북(063), 전남(061), 전국(99)
-AREACODE = "044"  # 검색하고자 하는 지역의 지역번호 설정
+print("서울(02), 경기(031), 인천(032), 대전(042), 대구(053), 부산(051), 울산(052), 광주(062), 제주(064)\n강원(033), 세종(044), 충북(043), 충남(041), 경북(054), 경남(055), 전북(063), 전남(061), 전국(99)")
+AREACODE = input("AREACODE: ")  # 검색하고자 하는 지역의 지역번호 설정
 
 
 um = url_csv_manager.UrlManager(AREACODE)
@@ -33,16 +38,17 @@ while True:
             csv_list_areacode.append(c)
 
     if len(csv_list_areacode) != 0:
-        ans = input("Want to rescrap url? (y/n)")
+        print(f"이미 지역번호가 {AREACODE}인 URL 리스트가 존재합니다. URL을 다시 수집할까요? \n재수집 시 result 디렉토리에 있는 지역번호가 {AREACODE}인 json 파일은 모두 삭제됩니다.")
+        ans = input("(y/n)")
         if ans == "y" or ans == "Y":
-            um.save_url()  # AREACODE.csv 재생성
+            um.save_url(True)  # AREACODE.csv 재생성
             break
         if ans == "n" or ans == "N":
             break
         print("Put the right answer.")
 
     else:
-        um.save_url()  # AREACODE.csv 최초생성
+        um.save_url(False)  # AREACODE.csv 최초생성
         break
 
 # Chrome Browser Driver Setting
