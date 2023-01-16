@@ -7,8 +7,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-# os.chdir('')
-
 class UrlManager:
 
     def __init__(self, areacode):
@@ -28,7 +26,7 @@ class UrlManager:
         url_list = []
 
         while True:
-            entered_page = int(input(f"How many pages? (max: {last_page}) :"))
+            entered_page = int(input(f"How many pages? (max: {last_page}) : "))
             if entered_page > int(last_page):
                 print("Please enter a number less than max.")
             else:
@@ -65,7 +63,7 @@ class UrlManager:
 
         return url_list
 
-    def save_url(self, isrescrap):
+    def save_url(self, rescrap):
         url_list = self.extract_url()
         url_csv = open(f"{os.getcwd()}/url/{self.AREACODE}.csv", "w")
         writer = csv.writer(url_csv)
@@ -79,19 +77,19 @@ class UrlManager:
         delete_json_list = []
 
         # result 디렉토리에 있는 AREACODE.json 파일 모두 삭제 (결과 파일 중복 방지)
-        if isrescrap:
+        if rescrap:
             dir_path = f"{os.getcwd()}/result"
             for (root, directories, files) in os.walk(dir_path):
                 for file in files:
-                    if self.AREACODE in file:
+                    if '.json' in file:
                         file_path = os.path.join(root, file)
-                        delete_json_list.append(file_path)
+                        if self.AREACODE == file_path[-28:-25] or self.AREACODE == file_path[-27:-25]:
+                            file_path_to_delete = file_path
+                            delete_json_list.append(file_path_to_delete)
 
             for j in delete_json_list:
                 os.remove(j)
 
-
-        return
 
     def overwrite_url(self):
         try:

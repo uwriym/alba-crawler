@@ -34,7 +34,7 @@ while True:
                 csv_list.append(file_path)
 
     for c in csv_list:
-        if AREACODE in c:
+        if AREACODE == c[-7:-4] or AREACODE == c[-6:-4]:
             csv_list_areacode.append(c)
 
     if len(csv_list_areacode) != 0:
@@ -51,16 +51,23 @@ while True:
         um.save_url(False)  # AREACODE.csv 최초생성
         break
 
+
+url_dict_list = um.load_url()
+
+num_of_item = int(input(f"How many alba info? (max: {len(url_dict_list)}) : "))
+
 # Chrome Browser Driver Setting
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--disable-blink-features=AutomationControlled')
 chrome_options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-
-url_dict_list = um.load_url()
-
-url_list_to_save = cr.manage_extract(driver, url_dict_list)
+while True:
+    if num_of_item > len(url_dict_list):
+        print("Please enter a number less than max.")
+    else:
+        url_list_to_save = cr.manage_extract(driver, url_dict_list, num_of_item)
+        break
 
 um.update_url_status(url_list_to_save)
 

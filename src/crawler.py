@@ -26,7 +26,7 @@ class AlbaCrawler:
                     json_list.append(file_path)
 
         for j in json_list:
-            if self.AREACODE in j:
+            if self.AREACODE == j[-28:-25] or self.AREACODE == j[-27:-25]:
                 json_list_areacode.append(j)
 
         if len(json_list_areacode) > 0:
@@ -138,7 +138,7 @@ class AlbaCrawler:
 
         return result_json
 
-    def manage_extract(self, driver, url_dict_list):
+    def manage_extract(self, driver, url_dict_list, num_of_item):
         result_list = []
         n = 1
         for i in url_dict_list:
@@ -168,8 +168,8 @@ class AlbaCrawler:
 
             n += 1
 
-            # if n == 16:
-                # break
+            if n == num_of_item+1:
+                break
 
         driver.quit()
 
