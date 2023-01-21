@@ -39,7 +39,7 @@ while True:
 
     if len(csv_list_areacode) != 0:
         print(f"이미 지역번호가 {AREACODE}인 URL 리스트가 존재합니다. URL을 다시 수집할까요? \n재수집 시 result 디렉토리에 있는 지역번호가 {AREACODE}인 json 파일은 모두 삭제됩니다.")
-        ans = input("(y/n)")
+        ans = input("(y/n) ")
         if ans == "y" or ans == "Y":
             um.save_url(True)  # AREACODE.csv 재생성
             break

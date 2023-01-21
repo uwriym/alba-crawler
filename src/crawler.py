@@ -100,11 +100,16 @@ class AlbaCrawler:
                                                "div.detail-content__condition-list:first-child > dl:nth-child(8) > dd").text
         except:
             prefer_treat = "X"
-
-        pay_type = driver.find_element(By.CSS_SELECTOR,
-                                       "div.detail-content__condition-list:nth-child(2) > dl:nth-child(2) > dd > p > i").text.strip()
-        pay_money = driver.find_element(By.CSS_SELECTOR,
+        try:
+            pay_type = driver.find_element(By.CSS_SELECTOR,
+                                           "div.detail-content__condition-list:nth-child(2) > dl:nth-child(2) > dd > p > i").text.strip()
+        except:
+            pay_type = "X"
+        try:
+            pay_money = driver.find_element(By.CSS_SELECTOR,
                                         "div.detail-content__condition-list:nth-child(2) > dl:nth-child(2) > dd > p > strong").text + "원".strip()
+        except:
+            pay_money = "X"
         emp_period = driver.find_element(By.CSS_SELECTOR,
                                          "div.detail-content__condition-list:nth-child(2) > dl:nth-child(3) > dd").text
         working_day = driver.find_element(By.CSS_SELECTOR,
